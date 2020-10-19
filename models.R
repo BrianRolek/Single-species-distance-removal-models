@@ -7,14 +7,18 @@
 # treatment models- Poisson (5) and ZIP (6) 
 
 ##### Notation ##########################################
-## indices: i=site, k=visit, t=year, spp=species
-## pa.beta = availability/removal parameters
-## pp.beta = perceptibility/distance scale parameters
+## indices: i=site, k=visit, t=year
+## XX.beta = parameters for regression
+## pa... related to availability
+## pp... related to perceptibility
+## lam... related to abundance
+## psi... related to habitat suitability
 ## dist.sigma = distance scale parameter
 ## N = detection corrected abundance
 ## Ntot = population size of total area surveyed
 ## D = density
 ## bayesp = Bayesian p-value for model fit
+## w... = Bernoulli indicator variables for GVS
 
 ####################################
 # (1) basic Poisson model
@@ -38,8 +42,8 @@ cat("
     for(t in 1:YR){  
     for(b in 1:nD){
     g[i,t,b] <- exp(-midpt[b]*midpt[b]/(2*dist.sigma[i,t]*dist.sigma[i,t])) # half-normal distance function
-    f[i,t,b] <- (2*midpt[b]*delta)/(B*B)     # radial density function for point counts, change for line transects
-    pi.pd[i,t,b] <- g[i,t,b]*f[i,t,b]
+    f[b] <- (2*midpt[b]*delta)/(B*B)     # radial density function for point counts, change for line transects
+    pi.pd[i,t,b] <- g[i,t,b]*f[b]
     pi.pd.c[i,t,b] <- pi.pd[i,t,b]/pdet[i,t]
     } #nD
     pdet[i,t] <- sum(pi.pd[i,t,1:nD]) # Distance class probabilities
@@ -67,16 +71,15 @@ cat("
     E.p[i,t] <- pow((nobs[i,t]- e.p[i,t]),2)/(e.p[i,t]+0.5)
     E.New.p[i,t]<- pow((nobs.fit[i,t]-e.p[i,t]),2)/(e.p[i,t]+0.5)
     }} #YR #nsites 
-    
+    fit.p <- sum(E.p[1:nsites,1:YR])
+    fit.new.p <- sum(E.New.p[1:nsites,1:YR])
+    bayesp<-step(fit.new.p-fit.p) # Bayesian p-value for availability model. =0.5 is good fit, near 0 or 1 is poor fit
+
     ##### DERIVED QUANTITIES ####################################
     for(t in 1:YR){
     Ntot[t] <- sum(N[1:nsites,t])
     D[t] <- Ntot[t] / ((3.14*B*B*nsites)/10000)  # dens per ha
     } #YR
-    
-    fit.p <- sum(E.p[1:nsites,1:YR])
-    fit.new.p <- sum(E.New.p[1:nsites,1:YR])
-    bayesp<-step(fit.new.p-fit.p) # Bayesian p-value for availability model. =0.5 is good fit, near 0 or 1 is poor fit
     } # End model
     ",file="./basic-model-Poisson.txt")
 
@@ -104,8 +107,8 @@ cat("
     for(t in 1:YR){  
     for(b in 1:nD){
     g[i,t,b] <- exp(-midpt[b]*midpt[b]/(2*dist.sigma[i,t]*dist.sigma[i,t])) # half-normal distance function
-    f[i,t,b] <- (2*midpt[b]*delta)/(B*B)     # radial density function for point counts, change for line transects
-    pi.pd[i,t,b] <- g[i,t,b]*f[i,t,b]
+    f[b] <- (2*midpt[b]*delta)/(B*B)     # radial density function for point counts, change for line transects
+    pi.pd[i,t,b] <- g[i,t,b]*f[b]
     pi.pd.c[i,t,b] <- pi.pd[i,t,b]/pdet[i,t]
     } #nD
     pdet[i,t] <- sum(pi.pd[i,t,1:nD]) # Distance class probabilities
@@ -130,22 +133,22 @@ cat("
     log(lambda[i,t]) <- lam.beta # add covariates for abundance
     logit(psi[i,t]) <- psi.beta # add covariates for habitat suitability
     # If not running set inits near psi=1 on logit scale. For example psi.beta=10
+    
     ##### GOODNESS OF FIT #######################################
     nobs.fit[i,t] ~ dbin(pmarg[i,t], N[i,t]) # create new realization of model
     e.p[i,t] <- pmarg[i,t] * N[i,t] # original model prediction
     E.p[i,t] <- pow((nobs[i,t]- e.p[i,t]),2)/(e.p[i,t]+0.5)
     E.New.p[i,t]<- pow((nobs.fit[i,t]-e.p[i,t]),2)/(e.p[i,t]+0.5)
     }} #YR #nsites 
-    
+    fit.p <- sum(E.p[1:nsites,1:YR])
+    fit.new.p <- sum(E.New.p[1:nsites,1:YR])
+    bayesp<-step(fit.new.p-fit.p) # Bayesian p-value for availability model. =0.5 is good fit, near 0 or 1 is poor fit
+
     ##### DERIVED QUANTITIES ####################################
     for(t in 1:YR){
     Ntot[t] <- sum(N[1:nsites,t])
     D[t] <- Ntot[t] / ((3.14*B*B*nsites)/10000)  # dens per ha
     } #YR
-    
-    fit.p <- sum(E.p[1:nsites,1:YR])
-    fit.new.p <- sum(E.New.p[1:nsites,1:YR])
-    bayesp<-step(fit.new.p-fit.p) # Bayesian p-value for availability model. =0.5 is good fit, near 0 or 1 is poor fit
     } # End model
     ",file="./basic-model-ZIP.txt")
 
@@ -204,10 +207,10 @@ cat("
     
     # set up the vectors/matrices for beta estimation, abundance
     for(b1 in 1:n.betas){
-    wtemp[b1] <- w[pos[b1]]                # this uses GVS
-    #wtemp[b1] <- 1                          # this forces you to fit the full model (all terms included)
+    wtemp[b1] <- w[pos[b1]]   # this uses GVS
+    #wtemp[b1] <- 1   # this forces you to fit the full model (all terms included)
     mean.b[b1] <- post.b[b1]*(1-wtemp[b1])  # prior is either 0 or full-model posterior mean
-    for(b2 in 1:n.betas){                   # set up the precision matrix (inverse variance) # allows for betas to be multivariate, if desired
+    for(b2 in 1:n.betas){   # set up the precision matrix (inverse variance) # allows for betas to be multivariate, if desired
     tau.b[b1,b2] <- equals(b1,b2)*((1/sd.b[b1]^2)*(1-wtemp[b1])) + (wtemp[b1]*b.tau)
     } # b2
     lam.beta[b1] ~ dnorm(mean.b[b1],tau.b[b1,b1])   # all beta coefficients
@@ -240,7 +243,6 @@ cat("
     
     stand.tau <- 1/ (stand.sig*stand.sig)
     stand.sig ~ dunif(0,10)
-    
     yr.tau <- 1/ (yr.sig*yr.sig)
     yr.sig ~ dunif(0,20)
     obs.tau <- 1/ (obs.sig*obs.sig)
@@ -260,8 +262,8 @@ cat("
     for(t in 1:YR){  
     for(b in 1:nD){
     g[i,t,b] <- exp(-midpt[b]*midpt[b]/(2*dist.sigma[i,t]*dist.sigma[i,t])) # half-normal distance function
-    f[i,t,b] <- (2*midpt[b]*delta)/(B*B)     # radial density function for point counts, change for line transects
-    pi.pd[i,t,b] <- g[i,t,b]*f[i,t,b]
+    f[b] <- (2*midpt[b]*delta)/(B*B)     # radial density function for point counts, change for line transects
+    pi.pd[i,t,b] <- g[i,t,b]*f[b]
     pi.pd.c[i,t,b] <- pi.pd[i,t,b]/pdet[i,t]
     } #nD
     pdet[i,t] <- sum(pi.pd[i,t,1:nD]) # Distance class probabilities
@@ -292,11 +294,12 @@ cat("
     E.p[i,t] <- pow((nobs[i,t]- e.p[i,t]),2)/(e.p[i,t]+0.5)
     E.New.p[i,t]<- pow((nobs.fit[i,t]-e.p[i,t]),2)/(e.p[i,t]+0.5)
     }} #YR #nsites 
-    
-    for (s in 1:S) {
-    lam.beta.s[s] ~ dnorm(0, stand.tau)
-    } #S
+    fit.p <- sum(E.p[1:nsites,1:YR])
+    fit.new.p <- sum(E.New.p[1:nsites,1:YR])
+    bayesp<-step(fit.new.p-fit.p) # Bayesian p-value for availability model. =0.5 is good fit, near 0 or 1 is poor fit
+
     # Random effects
+    for (s in 1:S) { lam.beta.s[s] ~ dnorm(0, stand.tau) } #S
     for (y in 1:9){ yr.eps[y] ~ dnorm(0, yr.tau)}
     for (o in 1:28){ obs.eps[o] ~ dnorm(0, obs.tau)} 
     
@@ -305,10 +308,6 @@ cat("
     Ntot[t] <- sum(N[1:nsites,t])
     D[t] <- Ntot[t] / ((3.14*B*B*nsites)/10000)  # dens per ha
     } #YR
-    
-    fit.p <- sum(E.p[1:nsites,1:YR])
-    fit.new.p <- sum(E.New.p[1:nsites,1:YR])
-    bayesp<-step(fit.new.p-fit.p) # Bayesian p-value for availability model. =0.5 is good fit, near 0 or 1 is poor fit
     } # End model
     ",file="./veg-Poisson-GVS.txt")
 
@@ -423,8 +422,8 @@ cat("
     for(t in 1:YR){  
     for(b in 1:nD){
     g[i,t,b] <- exp(-midpt[b]*midpt[b]/(2*dist.sigma[i,t]*dist.sigma[i,t])) # half-normal distance function
-    f[i,t,b] <- (2*midpt[b]*delta)/(B*B)     # radial density function for point counts, change for line transects
-    pi.pd[i,t,b] <- g[i,t,b]*f[i,t,b]
+    f[b] <- (2*midpt[b]*delta)/(B*B)     # radial density function for point counts, change for line transects
+    pi.pd[i,t,b] <- g[i,t,b]*f[b]
     pi.pd.c[i,t,b] <- pi.pd[i,t,b]/pdet[i,t]
     } #nD
     pdet[i,t] <- sum(pi.pd[i,t,1:nD]) # Distance class probabilities
@@ -455,11 +454,12 @@ cat("
     E.p[i,t] <- pow((nobs[i,t]- e.p[i,t]),2)/(e.p[i,t]+0.5)
     E.New.p[i,t]<- pow((nobs.fit[i,t]-e.p[i,t]),2)/(e.p[i,t]+0.5)
     }} #YR #nsites 
-    
-    for (s in 1:S) {
-    lam.beta.s[s] ~ dnorm(0, stand.tau)
-    } #S
+    fit.p <- sum(E.p[1:nsites,1:YR])
+    fit.new.p <- sum(E.New.p[1:nsites,1:YR])
+    bayesp<-step(fit.new.p-fit.p) # Bayesian p-value for availability model. =0.5 is good fit, near 0 or 1 is poor fit
+
     # Random effects
+    for (s in 1:S) { lam.beta.s[s] ~ dnorm(0, stand.tau) } #S
     for (y in 1:9){ yr.eps[y] ~ dnorm(0, yr.tau)}
     for (o in 1:28){ obs.eps[o] ~ dnorm(0, obs.tau)} 
     
@@ -468,10 +468,6 @@ cat("
     Ntot[t] <- sum(N[1:nsites,t])
     D[t] <- Ntot[t] / ((3.14*B*B*nsites)/10000)  # dens per ha
     } #YR
-    
-    fit.p <- sum(E.p[1:nsites,1:YR])
-    fit.new.p <- sum(E.New.p[1:nsites,1:YR])
-    bayesp<-step(fit.new.p-fit.p) # Bayesian p-value for availability model. =0.5 is good fit, near 0 or 1 is poor fit
     } # End model
     ",file="./veg-ZIP-GVS.txt")
 
@@ -589,8 +585,8 @@ cat("
     for(t in 1:YR){  
     for(b in 1:nD){
     g[i,t,b] <- exp(-midpt[b]*midpt[b]/(2*dist.sigma[i,t]*dist.sigma[i,t])) # half-normal distance function
-    f[i,t,b] <- (2*midpt[b]*delta)/(B*B)     # radial density function for point counts, change for line transects
-    pi.pd[i,t,b] <- g[i,t,b]*f[i,t,b]
+    f[b] <- (2*midpt[b]*delta)/(B*B)     # radial density function for point counts, change for line transects
+    pi.pd[i,t,b] <- g[i,t,b]*f[b]
     pi.pd.c[i,t,b] <- pi.pd[i,t,b]/pdet[i,t]
     } #nD
     pdet[i,t] <- sum(pi.pd[i,t,1:nD]) # Distance class probabilities
@@ -621,11 +617,12 @@ cat("
     E.p[i,t] <- pow((nobs[i,t]- e.p[i,t]),2)/(e.p[i,t]+0.5)
     E.New.p[i,t]<- pow((nobs.fit[i,t]-e.p[i,t]),2)/(e.p[i,t]+0.5)
     }} #YR #nsites 
-    
-    for (s in 1:S) {
-    lam.beta.s[s] ~ dnorm(stand.mu[s], stand.tau)
-    } #S
+    fit.p <- sum(E.p[1:nsites,1:YR])
+    fit.new.p <- sum(E.New.p[1:nsites,1:YR])
+    bayesp<-step(fit.new.p-fit.p) # Bayesian p-value for availability model. =0.5 is good fit, near 0 or 1 is poor fit
+
     # Random effects
+    for (s in 1:S) { lam.beta.s[s] ~ dnorm(stand.mu[s], stand.tau) } #S
     for (y in 1:9){ yr.eps[y] ~ dnorm(0, yr.tau)}
     for (o in 1:28){ obs.eps[o] ~ dnorm(0, obs.tau)} 
     
@@ -634,10 +631,6 @@ cat("
     Ntot[t] <- sum(N[1:nsites,t])
     D[t] <- Ntot[t] / ((3.14*B*B*nsites)/10000)  # dens per ha
     } #YR
-    
-    fit.p <- sum(E.p[1:nsites,1:YR])
-    fit.new.p <- sum(E.New.p[1:nsites,1:YR])
-    bayesp<-step(fit.new.p-fit.p) # Bayesian p-value for availability model. =0.5 is good fit, near 0 or 1 is poor fit
     } # End model
     ",file="./treatment-Poisson-GVS.txt")
 
@@ -702,8 +695,8 @@ cat("
     
     # set up the vectors/matrices for beta estimation, abundance
     for(b1 in 1:n.betas){
-    # wtemp[b1] <- w[pos[b1]]                # this uses GVS
-    wtemp[b1] <- 1                          # this forces you to fit the full model (all terms included)
+    wtemp[b1] <- w[pos[b1]]                # this uses GVS
+    # wtemp[b1] <- 1                          # this forces you to fit the full model (all terms included)
     mean.b[b1] <- post.b[b1]*(1-wtemp[b1])  # prior is either 0 or full-model posterior mean
     for(b2 in 1:n.betas){                   # set up the precision matrix (inverse variance) # allows for betas to be multivariate, if desired
     tau.b[b1,b2] <- equals(b1,b2)*((1/sd.b[b1]^2)*(1-wtemp[b1])) + (wtemp[b1]*b.tau)
@@ -713,8 +706,8 @@ cat("
     
     # set up the vectors/matrices for beta estimation, zero-inflation
     for(b1 in 1:n.betas){
-    # wzi.temp[b1] <- wzi[pos[b1]]                # this uses GVS
-    wzi.temp[b1] <- 1                          # this forces you to fit the full model (all terms included)
+    wzi.temp[b1] <- wzi[pos[b1]]                # this uses GVS
+    # wzi.temp[b1] <- 1                          # this forces you to fit the full model (all terms included)
     mean.b.zi[b1] <- post.b.zi[b1]*(1-wzi.temp[b1])  # prior is either 0 or full-model posterior mean
     for(b2 in 1:n.betas){                   # set up the precision matrix (inverse variance) # allows for betas to be multivariate, if desired
     tau.b.zi[b1,b2] <- equals(b1,b2)*((1/sd.b.zi[b1]^2)*(1-wzi.temp[b1])) + (wzi.temp[b1]*b.tau.zi)
@@ -724,8 +717,8 @@ cat("
     
     # set up the vectors/matrices for beta estimation, availability
     for(b1 in 2:n.betas.pa){ # starts at 2 because intercept always requires a diff prior and w=1
-    # wpa.temp[b1] <- wpa[pos.pa[b1]]
-    wpa.temp[b1] <- 1
+    wpa.temp[b1] <- wpa[pos.pa[b1]]
+    # wpa.temp[b1] <- 1
     mean.b.pa[b1] <- post.b.pa[b1]*(1-wpa.temp[b1])
     for(b2 in 2:n.betas.pa){ # starts at 2 because intercept always requires a diff prior and w=1
     tau.b.pa[b1,b2] <- equals(b1,b2)*((1/sd.b.pa[b1]^2)*(1-wpa.temp[b1])) + (wpa.temp[b1]*b.tau.pa)
@@ -735,8 +728,8 @@ cat("
     
     # set up the vectors/matrices for beta estimation, perceptility
     for(b1 in 2:n.betas.pp){ # starts at 2 because intercept always requires a diff prior and w=1
-    #wpp.temp[b1] <- wpp[pos.pp[b1]]
-    wpp.temp[b1] <- 1
+    wpp.temp[b1] <- wpp[pos.pp[b1]]
+    # wpp.temp[b1] <- 1
     mean.b.pp[b1] <- post.b.pp[b1]*(1-wpp.temp[b1])
     for(b2 in 2:n.betas.pp){ # starts at 2 because intercept always requires a diff prior and w=1
     tau.b.pp[b1,b2] <- equals(b1,b2)*((1/sd.b.pp[b1]^2)*(1-wpp.temp[b1])) + (wpp.temp[b1]*b.tau.pp)
@@ -745,8 +738,8 @@ cat("
     } # b1
     
     # vector of stand-specific predictors
-    stand.mu <- mm[,] %*% (s.beta[]*wtemp[])
-    stand.mu.psi <- mm[,] %*% (s.beta.psi[]*wzi.temp[])
+    stand.mu <- mm[,] %*% (s.beta[]*wtemp[]) # regressions on stand-level abundance
+    stand.mu.psi <- mm[,] %*% (s.beta.psi[]*wzi.temp[]) # regressions on stand-level habitat suitability
     
     stand.tau.psi <- 1/ (stand.sig.psi*stand.sig.psi)
     stand.sig.psi ~ dunif(0,10)
@@ -772,8 +765,8 @@ cat("
     for(t in 1:YR){  
     for(b in 1:nD){
     g[i,t,b] <- exp(-midpt[b]*midpt[b]/(2*dist.sigma[i,t]*dist.sigma[i,t])) # half-normal distance function
-    f[i,t,b] <- (2*midpt[b]*delta)/(B*B)     # radial density function for point counts, change for line transects
-    pi.pd[i,t,b] <- g[i,t,b]*f[i,t,b]
+    f[b] <- (2*midpt[b]*delta)/(B*B)     # radial density function for point counts, change for line transects
+    pi.pd[i,t,b] <- g[i,t,b]*f[b]
     pi.pd.c[i,t,b] <- pi.pd[i,t,b]/pdet[i,t]
     } #nD
     pdet[i,t] <- sum(pi.pd[i,t,1:nD]) # Distance class probabilities
@@ -806,12 +799,14 @@ cat("
     E.p[i,t] <- pow((nobs[i,t]- e.p[i,t]),2)/(e.p[i,t]+0.5)
     E.New.p[i,t]<- pow((nobs.fit[i,t]-e.p[i,t]),2)/(e.p[i,t]+0.5)
     }} #YR #nsites 
-    
+    fit.p <- sum(E.p[1:nsites,1:YR])
+    fit.new.p <- sum(E.New.p[1:nsites,1:YR])
+    bayesp<-step(fit.new.p-fit.p) # Bayesian p-value for availability model. =0.5 is good fit, near 0 or 1 is poor fit
+
     # Random effects
     for (s in 1:S){ psi.beta.s[s] ~ dnorm(stand.mu.psi[s], stand.tau.psi)
     lam.beta.s[s] ~ dnorm(stand.mu[s], stand.tau) } #S
     for (y in 1:9){ yr.eps[y] ~ dnorm(0, yr.tau) }
-    #yr.eps.psi[y] ~ dnorm(0, yr.tau.psi) } # y
     for (o in 1:28){ obs.eps[o] ~ dnorm(0, obs.tau)} # o
     
     ##### DERIVED QUANTITIES ####################################
@@ -819,10 +814,6 @@ cat("
     Ntot[t] <- sum(N[1:nsites,t])
     D[t] <- Ntot[t] / ((3.14*B*B*nsites)/10000)  # dens per ha
     } #YR
-    
-    fit.p <- sum(E.p[1:nsites,1:YR])
-    fit.new.p <- sum(E.New.p[1:nsites,1:YR])
-    bayesp<-step(fit.new.p-fit.p) # Bayesian p-value for availability model. =0.5 is good fit, near 0 or 1 is poor fit
     } # End model
     " ,file="./treatment-ZIP-GVS.txt")
 
