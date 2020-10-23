@@ -1,14 +1,10 @@
-#setwd("C:\\Dropbox\\R\\Chapter2")
-#load("./Data/DATA.RData")
 library (jagsUI)
-load ("/scratch/brolek/ch2/Data/DATA.Rdata")
-load("/scratch/brolek/ch2/Data/global_est_zi_veg.Rdata")
+load ("./DATA.Rdata")
+load("./global_est_zi_veg.Rdata")
 datalfoc$SPP <- length(spp.list.foc)
 yr <- array(NA, dim=c(dim (ab)[1], 9) )
 yr[,1:3] <- 1; yr[,4:6] <- 2; yr[,7:9] <- 3
 datalfoc$yr <- yr
-datalfoc$tsh.pred <- seq(length.out=7, -3, 3)
-datalfoc$tsh2.pred <- seq(length.out=7, -3, 3)
 s.year <- array(NA, dim=c(114, 9))
 s.year[,1:3] <- 1; s.year[,4:6] <- 2; s.year[,7:9] <- 3
 datalfoc$s.year <- s.year
@@ -31,15 +27,15 @@ mm <- model.matrix(~ 1 + ba + sf +  dbh + md + scov + scomp + lcr +
                      ba:sf + I(ba^2) + I(sf^2) + I(ba^2):sf + ba:I(sf^2),
                      data=dd)
 
-# position of the beta coefficients associated with each term (i.e., treat has 7 terms w/ intercept)
+# position of the beta coefficients associated with each bernoilli indicator var (i.e., treat has 7 terms w/ intercept)
 pos <- as.numeric(attr(mm,"assign")+1)
 n.betas <- length(pos)
 pos.pa <- c(1:6)
 n.betas.pa <- length(pos.pa)
 pos.pp <- c(1:4)
 n.betas.pp <- length(pos.pp)
-# Define model in BUGS
 
+# Define model in BUGS
 cat("
     model {
     ##### Variables ##########################################
@@ -206,19 +202,16 @@ cat("
     fit.new.p <- sum(E.New.p[1:nsites,1:YR])
     bayesp<-step(fit.new.p-fit.p) # Bayesian p-value for availability model. =0.5 is good fit, near 0 or 1 is poor fit
     } # End model
-    ",file="/scratch/brolek/ch2/Analysis/global/models/V14_global.txt")
-#,file="V14.txt")
-#i <- 1
-for (i in 8){ #Skip spp c(10,3,5,2) use ZIPs
+    ",file="./model_V-zip-GVS.txt")
+
+for (i in c(11,10,3,5,2)){ #use zips for spp c(11,10,3,5,2)
   try(rm("out"))
   spp <- spp.list.foc[i]
   spp.num<- which(dimnames(nobs)[[3]]==spp)
-  # Inits and parameters to save
-  # Crunch the numbers, reformat
+
   datalfoc$nobs <- Nav <- apply(ab2[,1:2,,,spp], c(1,4),sum, na.rm=T)
   Mst <- apply(Nav, c(1), max, na.rm=T) +1
   
-  # remove comments to add covariates
   inits <- function(){  list(
     N = Nav,
     p.pa.beta0= runif(1, 0.3, 0.8),
@@ -229,7 +222,7 @@ for (i in 8){ #Skip spp c(10,3,5,2) use ZIPs
   
   params <- c("pa.beta", "pp.beta", 
               "lam.beta", "lam.beta1", "lam.beta2", 
-              "Ntot", "D", #"N", 
+              "Ntot", "D", 
               "stand.sig", "lam.beta", 
               "bayesp", "w", "wpa", "wpp",
               "yr.eps", "yr.sig", "obs.eps", "obs.sig"
@@ -259,27 +252,18 @@ for (i in 8){ #Skip spp c(10,3,5,2) use ZIPs
   datalfoc$post.b.pp <- post.b.pp[[spp.num2]] # out$mean$post.b
   datalfoc$sd.b.pp <- sd.b.pp[[spp.num2]]
   
-  # datalfoc$post.b <- rep(0, n.betas) # out$mean$post.b
-  # datalfoc$sd.b <- rep(10, n.betas)
-  # datalfoc$post.b.pa <- rep(0, n.betas.pa) # out$mean$post.b
-  # datalfoc$sd.b.pa <- rep(10, n.betas.pa)
-  # datalfoc$post.b.pp <- rep(0, n.betas.pp) # out$mean$post.b
-  # datalfoc$sd.b.pp <- rep(10, n.betas.pp)
-  
   # MCMC settings
   ni <- 200000  ;   nb <- 100000   ;   nt <- 10   ;   nc <- 3 ; na=10000
   #ni <- 100 ;   nb <- 50   ;   nt <- 1   ;   nc <- 1 ; na <- 100
-  #ni <- 20000  ;   nb <- 10000   ;   nt <- 10   ;   nc <- 3 ; na=1000
   # Run JAGS
   out <- jags(datalfoc, inits=inits, 
-              params, "/scratch/brolek/ch2/Analysis/global/models/V14_global.txt",
-              #"V14.txt", 
+              params, "./model_V-zip-GVS.txt",
               n.thin=nt, n.chains=nc, 
               n.burnin=nb, n.iter=ni, n.adapt=na,
               parallel = T, modules=c("glm"),
               codaOnly= "N")
   
-  fn<- paste( "/scratch/brolek/ch2/outputs/veg_global_GVS_zi_", spp, ".RData", sep="" )
+  fn<- paste( "./", spp, "_V-zip-GVS.RData", sep="" )
   save(list= c("out", "datalfoc"), file=fn)
 }
 
