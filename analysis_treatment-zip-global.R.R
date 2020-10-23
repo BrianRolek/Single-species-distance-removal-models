@@ -1,14 +1,10 @@
-#setwd("C:\\Dropbox\\R\\Chapter2")
 library (jagsUI)
-load ("/scratch/brolek/ch2/Data/DATA.RData")
-#load("/scratch/brolek/ch2/Data/global_est.Rdata")
-#load("Data/DATA.RData")
+load ("./DATA.RData")
+# data manipulation
 datalfoc$SPP <- length(spp.list.foc)
 yr <- array(NA, dim=c(dim (ab)[1], 9) )
 yr[,1:3] <- 1; yr[,4:6] <- 2; yr[,7:9] <- 3
 datalfoc$yr <- yr
-datalfoc$tsh.pred <- seq(length.out=7, -3, 3)
-datalfoc$tsh2.pred <- seq(length.out=7, -3, 3)
 s.year <- array(NA, dim=c(114, 9))
 s.year[,1:3] <- 1; s.year[,4:6] <- 2; s.year[,7:9] <- 3
 datalfoc$s.year <- s.year
@@ -27,7 +23,7 @@ apply(ab2[,1:2,,,dimnames(ab2)[[5]] %in% spp.list.foc], c(5), sum, na.rm=T)
 dd <- data.frame(treat=factor(datalfoc$treat),tsh=datalfoc$tsh,tsh2=datalfoc$tsh2)
 # model matrix of stand effects (contr.sum is critical here)
 mm <- model.matrix(~treat*tsh+treat*tsh2,dd,contrasts=list(treat="contr.sum"))
-# position of the beta coefficients associated with each term (i.e., treat has 7 terms w/ intercept)
+# position of the beta coefficients associated with bernoulli indicator variable (i.e., treat has 7 terms w/ intercept)
 pos <- as.numeric(attr(mm,"assign")+1)
 n.betas <- length(pos)
 pos.pa <- c(1:6)
@@ -225,13 +221,17 @@ fit.p <- sum(E.p[1:nsites,1:YR])
 fit.new.p <- sum(E.New.p[1:nsites,1:YR])
 bayesp<-step(fit.new.p-fit.p) # Bayesian p-value for availability model. =0.5 is good fit, near 0 or 1 is poor fit
     } # End model
-    " ,file="/scratch/brolek/ch2/Analysis/global/models/SS1TR14zi_global.txt")
-    #,file="SS1TR14zi_global.txt")
+    " ,file="./T-zip-global.txt")
+# CAUTION: These next lines run the model and
+# take a VERY long time to run 
+# (>1 week, each species took 4 days)
+# We ran these on an HPC and specified the
+# loop to run 4-5 species sequentially. 
+
 # poor model fit for these species
 # BOCH, GCKI, GRAJ, MAWA, YBFL, YPWA
 spp.zi <- c(10, 11, 3, 5, 2, 8)
-#i <- 1
-for (i in spp.zi[c(3,4)]){ #Create 5 files: 1:4, 5:8, 9:12, 13:16, 17:19
+for (i in spp.zi){ #Create 5 files: 1:4, 5:8, 9:12, 13:16, 17:19
 try(rm("out"))
 spp <- spp.list.foc[i]
 spp.num<- which(dimnames(nobs)[[3]]==spp)
@@ -254,7 +254,7 @@ inits <- function(){  list(
   )  }
 
 params <- c("pa.beta", "pp.beta", 
-            "Ntot", "D", #"N", 
+            "Ntot", "D", 
             "stand.sig", "stand.sig.psi", "s.beta", "s.beta.psi",
             "bayesp", "w", "wzi", "wpa", "wpp", 
             "yr.eps", "yr.sig", "yr.eps.psi", "yr.sig.psi", "obs.eps", "obs.sig"
@@ -275,17 +275,7 @@ datalfoc$pos.pp <- pos.pp
 datalfoc$n.betas <- n.betas
 datalfoc$n.betas.pa <- n.betas.pa
 datalfoc$n.betas.pp <- n.betas.pp
-# these should be replaced with actual posterior means & sds from a full model run!!
-#spp.num2 <- which( names(post.b)==spp )
-#datalfoc$post.b <- post.b[[spp.num2]] # out$mean$post.b
-#datalfoc$sd.b <-sd.b[[spp.num2]] 
-#datalfoc$post.b.zi <- post.b.zi[[spp.num2]] # out$mean$post.b
-#datalfoc$sd.b.zi <-sd.b.zi[[spp.num2]]
-#datalfoc$post.b.pa <- post.b.pa[[spp.num2]] # out$mean$post.b
-#datalfoc$sd.b.pa <- sd.b.pa[[spp.num2]]
-#datalfoc$post.b.pp <- post.b.pp[[spp.num2]] # out$mean$post.b
-#datalfoc$sd.b.pp <- sd.b.pp[[spp.num2]]
-
+# these should be replaced with actual posterior means & sds from a global model run to implement GVS
 datalfoc$post.b <- rep(0, 21) # out$mean$post.b
 datalfoc$sd.b <- rep(100, 21) 
 datalfoc$post.b.zi <- rep(0, 21) # out$mean$post.b
@@ -297,16 +287,15 @@ datalfoc$sd.b.pp <- rep(100, 4)
 # MCMC settings
 ni <- 200000  ;   nb <- 100000   ;   nt <- 10   ;   nc <- 6 ; na=10000
 #ni <- 100 ;   nb <- 50   ;   nt <- 1   ;   nc <- 1 ; na <- 100
-#ni <- 20000  ;   nb <- 10000   ;   nt <- 10   ;   nc <- 3 ; na=1000
 # Run JAGS
 out <- jags(datalfoc, inits=inits, 
-            params, "/scratch/brolek/ch2/Analysis/global/models/SS1TR14zi_global.txt",
+            params, "./T-zip-global.txt",
             n.thin=nt, n.chains=nc, 
             n.burnin=nb, n.iter=ni, n.adapt=na
             , parallel = T, modules=c("glm"),
             codaOnly= "N")
 
-fn<- paste( "/scratch/brolek/ch2/outputs/", spp, "_zi_global.RData", sep="" )
+fn<- paste( "./", spp, "_T-zip-global.RData", sep="" )
 save(list= c("out", "datalfoc"), file=fn)
 }
 

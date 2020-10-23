@@ -1,14 +1,11 @@
-#setwd("C:\\Dropbox\\R\\Chapter2")
 library (jagsUI)
-load ("/scratch/brolek/ch2/Data/DATA.RData") 
-load("/scratch/brolek/ch2/Data/global_est.Rdata")
-#load("Data/DATA.RData")
+load ("./DATA.RData") 
+load("./global_est.Rdata") # output from global model run
+# data manipulation
 datalfoc$SPP <- length(spp.list.foc)
 yr <- array(NA, dim=c(dim (ab)[1], 9) )
 yr[,1:3] <- 1; yr[,4:6] <- 2; yr[,7:9] <- 3
 datalfoc$yr <- yr
-datalfoc$tsh.pred <- seq(length.out=7, -3, 3)
-datalfoc$tsh2.pred <- seq(length.out=7, -3, 3)
 s.year <- array(NA, dim=c(114, 9))
 s.year[,1:3] <- 1; s.year[,4:6] <- 2; s.year[,7:9] <- 3
 datalfoc$s.year <- s.year
@@ -20,9 +17,8 @@ int <- datalfoc$int
 site <- datalfoc$site
 yr_rot <- datalfoc$yr_rot
 
-# print sample sizes 
+# print number of detections
 apply(ab2[,1:2,,,dimnames(ab2)[[5]] %in% spp.list.foc], c(5), sum, na.rm=T)
-
 # create data frame of stand covariates
 dd <- data.frame(treat=factor(datalfoc$treat),tsh=datalfoc$tsh,tsh2=datalfoc$tsh2)
 # model matrix of stand effects (contr.sum is critical here)
