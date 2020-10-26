@@ -151,8 +151,8 @@ cat("
     for(t in 1:YR){  
     for(b in 1:nD){
     g[i,t,b] <- exp(-midpt[b]*midpt[b]/(2*dist.sigma[i,t]*dist.sigma[i,t])) # half-normal distance function
-    f[i,t,b] <- (2*midpt[b]*delta)/(B*B)     # radial density function for point counts, change for line transects
-    pi.pd[i,t,b] <- g[i,t,b]*f[i,t,b]
+    f[b] <- (2*midpt[b]*delta)/(B*B)     # radial density function for point counts, change for line transects
+    pi.pd[i,t,b] <- g[i,t,b]*f[b]
     pi.pd.c[i,t,b] <- pi.pd[i,t,b]/pdet[i,t]
     } #nD
     pdet[i,t] <- sum(pi.pd[i,t,1:nD]) # Distance class probabilities
