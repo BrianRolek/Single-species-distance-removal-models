@@ -165,11 +165,13 @@ for (l in 1:L) {
     } # L
 
 # Distance 
+    for(b in 1:nD){
+      f[b] <- (2*midpt[b]*delta)/(B*B)  # radial density function for point counts, change for line transects
+    }
     for (i in 1:nsites){
       for(t in 1:YR){  
         for(b in 1:nD){
             g[i,t,b] <- exp(-midpt[b]*midpt[b]/(2*dist.sigma[i,t]*dist.sigma[i,t])) # half-normal distance function
-            f[b] <- (2*midpt[b]*delta)/(B*B)     # radial density function for point counts, change for line transects
             pi.pd[i,t,b] <- g[i,t,b]*f[b]
             pi.pd.c[i,t,b] <- pi.pd[i,t,b]/pdet[i,t]
             } #nD
