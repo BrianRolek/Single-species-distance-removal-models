@@ -19,7 +19,7 @@ yr_rot <- datalfoc$yr_rot
 apply(ab2[,1:2,,,dimnames(ab2)[[5]] %in% spp.list.foc], c(5), sum, na.rm=T)
 
 # create data frame of stand covariates
-dd <- data.frame(treat=factor(datalfoc$treat),tsh=datalfoc$tsh,tsh2=datalfoc$tsh2)
+dd <- data.frame(treat=factor(datalfoc$treat),tsh=datalfoc$tsh,tsh2=datalfoc$tsh^2)
 # model matrix of stand effects (contr.sum is critical here)
 mm <- model.matrix(~treat*tsh+treat*tsh2,dd,contrasts=list(treat="contr.sum"))
 # position of the beta coefficients associated with bernoulli indicator variable (i.e., treat has 7 terms w/ intercept)
