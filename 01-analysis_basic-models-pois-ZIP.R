@@ -1,6 +1,22 @@
-library (jagsUI)
+############################
+# Supplemental materials for:
+# B. W. Rolek, D. J. Harrison, D. W. Linden,  C. S. Loftin, 
+# P. B. Wood. 2021. Associations among breeding 
+# conifer-associated birds, forestry treatments, 
+# years-since-harvest, and vegetation characteristics in 
+# regenerating stands. 
+#############################
+#############################################
+# This file is not needed to replicate analyses.
+# We provide the simplest version of the model used
+# as a template for other researchers to use for their 
+# own analyses
+#############################################
+# software used
+# JAGS 4.3.0 
+# R version 4.0.2 (2020-06-22) -- "Taking Off Again"
+library (jagsUI) # v1.5.1
 load ("./DATA.Rdata")
-
 # set up data
 datalfoc$SPP <- length(spp.list.foc)
 yr <- array(NA, dim=c(dim (ab)[1], 9) )
