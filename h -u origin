@@ -1,0 +1,24 @@
+[33ma61ba00[m[33m ([m[1;36mHEAD -> [m[1;32mpublish[m[33m)[m publish
+[33m3b29c96[m[33m ([m[1;31morigin/master[m[33m, [m[1;32mmaster[m[33m)[m Add Rmarkdown documents for workflow.Edit Readme.
+[33mf02a9a5[m Add software versions
+[33md3c809e[m Merge pull request #1 from BrianRolek/add-license-1
+[33m6be4465[m[33m ([m[1;31morigin/add-license-1[m[33m)[m Create LICENSE
+[33mc3e644a[m de
+[33m6a09260[m Add license.
+[33mce4df6a[m Update README.md
+[33m08a0629[m change file name, add order
+[33m5b5d8eb[m Number, order, and rename filenames.
+[33m4b37f87[m add .Rproj.user/ to gitignore
+[33m79335cc[m delete old files update gitignore to ignore .Rproj
+[33m6247266[m Put f(r) into it's own loop.
+[33mfab3441[m create script for basic model runs.
+[33m69e0bc3[m Update README.md
+[33m661130d[m Fix indices on f(r)
+[33m37ca2ef[m Create README.md
+[33mc82a287[m clean up scripts and comments
+[33m4d2ac29[m clean up scripts and comments
+[33m23ec2f7[m add analysis files
+[33mf2b2f52[m add data
+[33ma73adc6[m fix f(r)
+[33md39364c[m consolidate models into 1 file
+[33m8f4c36c[m set up repo
