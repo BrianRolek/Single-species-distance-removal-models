@@ -5,6 +5,7 @@
 # conifer-associated birds, forestry treatments, 
 # years-since-harvest, and vegetation characteristics in 
 # regenerating stands. 
+## ---- vegetation Poisson global --------
 #############################
 # software used
 # JAGS 4.3.0 

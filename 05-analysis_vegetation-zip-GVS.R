@@ -6,6 +6,7 @@
 # years-since-harvest, and vegetation characteristics in 
 # regenerating stands. 
 #############################
+## ---- vegetation ZIP GVS --------
 # software used
 # JAGS 4.3.0 
 # R version 4.0.2 (2020-06-22) -- "Taking Off Again"

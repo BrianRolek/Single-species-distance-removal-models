@@ -9,6 +9,7 @@
 # software used
 # JAGS 4.3.0 
 # R version 4.0.2 (2020-06-22) -- "Taking Off Again"
+## ---- treatment Poisson GVS --------
 library (jagsUI) # v1.5.1
 load("./global_est.Rdata") # output file from global model
 load ("./DATA.RData")

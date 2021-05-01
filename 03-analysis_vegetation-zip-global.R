@@ -1,3 +1,4 @@
+## ---- vegetation ZIP global --------
 library (jagsUI)
 load ("./DATA.Rdata")
 datalfoc$SPP <- length(spp.list.foc)

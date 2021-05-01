@@ -1,0 +1,54 @@
+---
+title: "run-analyses-treatment"
+author: "Brian W. Rolek"
+date: "May 1, 2021"
+output:
+  html_document:
+    df_print: paged
+    toc: yes
+  github_document:
+    toc: yes
+---
+
+<style type="text/css">
+  body{
+  font-size: 16pt;
+}
+</style>
+
+Supplemental materials for:
+B. W. Rolek, D. J. Harrison, D. W. Linden,  C. S. Loftin, 
+P. B. Wood. 2021. Associations among breeding 
+conifer-associated birds, forestry treatments, 
+years-since-harvest, and vegetation characteristics in 
+regenerating stands. 
+
+This RMarkdown document provides a workflow to reproduce analyses of abundance response to forestry treatments.   
+
+# 1. Run Abundance Models with a Poisson Distribution and Global Covariates
+```{r, include=FALSE, cache=FALSE}
+knitr::read_chunk('02-analysis_treatment-pois-global.R')
+```
+```{r, treatment Poisson global, eval=FALSE}
+```
+
+# 2. Run Abundance Models with a ZIP Distribution and Global Covariates
+```{r, include=FALSE, cache=FALSE}
+knitr::read_chunk('03-analysis_treatment-zip-global.R')
+```
+```{r, treatment ZIP global, eval=FALSE}
+```
+
+# 3. Run Abundance Models with a Poisson Distribution and Gibbs Variable Selection
+```{r, include=FALSE, cache=FALSE}
+knitr::read_chunk('04-analysis_treatment-pois-GVS.R')
+```
+```{r, treatment Poisson GVS, eval=FALSE}
+```
+
+# 4. Run Abundance Models with a ZIP Distribution and Gibbs Variable Selection
+```{r, include=FALSE, cache=FALSE}
+knitr::read_chunk('05-analysis_treatment-zip-GVS.R')
+```
+```{r, treatment ZIP GVS, eval=FALSE}
+```
