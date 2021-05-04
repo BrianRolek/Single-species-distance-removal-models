@@ -6,11 +6,11 @@
 # years-since-harvest, and vegetation characteristics in 
 # regenerating stands. 
 #############################
+## ---- basic Poisson --------
 #############################################
 # This file is not needed to replicate analyses.
 # We provide the simplest version of the model used
-# as a template for other researchers to use for their 
-# own analyses
+# as a template for other studies
 #############################################
 # software used
 # JAGS 4.3.0 
@@ -131,6 +131,31 @@ for (i in 1:19){
   fn<- paste( "./", spp, "_basic-pois.RData", sep="" )
   save(list= c("out"), file=fn)
 }
+
+## ---- basic ZIP --------
+# software used
+# JAGS 4.3.0 
+# R version 4.0.2 (2020-06-22) -- "Taking Off Again"
+library (jagsUI) # v1.5.1
+load ("./DATA.Rdata")
+# set up data
+datalfoc$SPP <- length(spp.list.foc)
+yr <- array(NA, dim=c(dim (ab)[1], 9) )
+yr[,1:3] <- 1; yr[,4:6] <- 2; yr[,7:9] <- 3
+datalfoc$yr <- yr
+s.year <- array(NA, dim=c(114, 9))
+s.year[,1:3] <- 1; s.year[,4:6] <- 2; s.year[,7:9] <- 3
+datalfoc$s.year <- s.year
+
+datalfoc$ba <- datalfoc$CovsLam[, "ba"]
+nobs <- datalfoc$nobs
+dclass <- datalfoc$dclass
+int <- datalfoc$int
+site <- datalfoc$site
+yr_rot <- datalfoc$yr_rot
+
+# print sample sizes 
+apply(ab2[,1:2,,,dimnames(ab2)[[5]] %in% spp.list.foc], c(5), sum, na.rm=T)
 
 ###################################
 # (2) basic zero-inflated Poisson model

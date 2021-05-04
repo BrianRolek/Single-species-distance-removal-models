@@ -30,60 +30,86 @@ regenerating stands.
 
 This RMarkdown document provides a workflow to reproduce analyses of abundance response to forestry treatments.  
 
-# 1. Analyses for Abundance and Vegetation
+# 1. Analyses of Abundance, Basic Models  
 
-## 1.1. Abundance and Vegetation Models with a Poisson Distribution and Global Covariates
+## 1.1 Abundance with a Poisson Distribution  
+```{r, include=FALSE, cache=FALSE}
+knitr::read_chunk('01-analysis_basic-models-pois-ZIP.R')
+```
+```{r, basic Poisson, eval=FALSE}
+```
+
+## 1.2 Abundance with a ZIP Distribution  
+```{r, include=FALSE, cache=FALSE}
+knitr::read_chunk('01-analysis_basic-models-pois-ZIP.R')
+```
+```{r, basic ZIP, eval=FALSE}
+```
+
+## 1.3. Calculate Prior Probabilities for Covariates in Gibbs Variable Selection  
+```{r, include=FALSE, cache=FALSE}
+knitr::read_chunk('covariate-prior-probs-for-GVS.R')
+```
+```{r, Prior probs veg, eval=TRUE, warning=FALSE, error=FALSE}
+```
+Next we calculate the prior probabilities for treatments and availability covariates in Gibbs variable selection. The two parts of the model happen to have the same model structure with different covariates so we just calculate these prior probabilites once.  
+```{r, Prior probs treat, eval=TRUE}
+```
+
+# 2. Analyses of Abundance and Vegetation
+
+## 2.1. Vegetation Covariates, Poisson Distribution, Global Covariates
 ```{r, include=FALSE, cache=FALSE}
 knitr::read_chunk('02-analysis_vegetation-pois-global.R')
 ```
 ```{r, vegetation Poisson global, eval=FALSE}
 ```
 
-## 1.2. Abundance and Vegetation Models with a ZIP Distribution and Global Covariates
+## 2.2. Vegetation Covariates, ZIP Distribution, Global Covariates
 ```{r, include=FALSE, cache=FALSE}
 knitr::read_chunk('03-analysis_vegetation-zip-global.R')
 ```
 ```{r, vegetation ZIP global, eval=FALSE}
 ```
 
-## 1.3. Abundance and Vegetation Models with a Poisson Distribution and Gibbs Variable Selection
+## 2.3. Vegetation Covariates, Poisson Distribution, Gibbs Variable Selection
 ```{r, include=FALSE, cache=FALSE}
 knitr::read_chunk('04-analysis_vegetation-pois-GVS.R')
 ```
 ```{r, vegetation poisson GVS, eval=FALSE}
 ```
 
-## 1.4. Abundance and Vegetation Models with a ZIP Distribution and Gibbs Variable Selection
+## 2.4. Vegetation Covariates with a ZIP Distribution and Gibbs Variable Selection
 ```{r, include=FALSE, cache=FALSE}
 knitr::read_chunk('05-analysis_vegetation-zip-GVS.R')
 ```
 ```{r, vegetation ZIP GVS, eval=FALSE}
 ```
 
-# 2. Analyses for Abundance and Forestry Treatments  
+# 3. Analyses of Abundance and Forestry Treatments  
 
-## 2.1. Abundance and Forestry Treatment Models with a Poisson Distribution and Global Covariates
+## 3.1. Forestry Treatment Covariates, Poisson Distribution, Global Covariates
 ```{r, include=FALSE, cache=FALSE}
 knitr::read_chunk('02-analysis_treatment-pois-global.R')
 ```
 ```{r, treatment Poisson global, eval=FALSE}
 ```
 
-## 2.2. Abundance  and Forestry Treatment Models with a ZIP Distribution and Global Covariates
+## 3.2. Forestry Treatment Covariates, ZIP Distribution, Global Covariates
 ```{r, include=FALSE, cache=FALSE}
 knitr::read_chunk('03-analysis_treatment-zip-global.R')
 ```
 ```{r, treatment ZIP global, eval=FALSE}
 ```
 
-## 2.3. Abundance  and Forestry Treatment Models with a Poisson Distribution and Gibbs Variable Selection
+## 3.3. Forestry Treatment Covariates, Poisson Distribution, Gibbs Variable Selection
 ```{r, include=FALSE, cache=FALSE}
 knitr::read_chunk('04-analysis_treatment-pois-GVS.R')
 ```
 ```{r, treatment Poisson GVS, eval=FALSE}
 ```
 
-## 2.4. Abundance  and Forestry Treatment Models with a ZIP Distribution and Gibbs Variable Selection
+## 3.4. Forestry Treatment Covariates, ZIP Distribution, Gibbs Variable Selection
 ```{r, include=FALSE, cache=FALSE}
 knitr::read_chunk('05-analysis_treatment-zip-GVS.R')
 ```
