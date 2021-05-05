@@ -1,5 +1,5 @@
 ---
-title: "analyses"
+title: "Appendix S2"
 knit: (function(input_file, encoding) {
   out_dir <- 'docs';
   rmarkdown::render(input_file,
@@ -23,23 +23,20 @@ output:
 
 Supplemental materials for:
 B. W. Rolek, D. J. Harrison, D. W. Linden,  C. S. Loftin, 
-P. B. Wood. 2021. Associations among breeding 
-conifer-associated birds, forestry treatments, 
-years-since-harvest, and vegetation characteristics in 
-regenerating stands.  
+P. B. Wood. 2021. Abundances of breeding conifer-associated birds in managed and regenerating forested stands. Ecological Applications. 
 
-This RMarkdown document provides a workflow to reproduce analyses of abundance response to forestry treatments.  
+This RMarkdown document provides R and JAGS code for analyses of abundance in response to vegetation, forestry treatments, and years-since-harvest.  
 
-# 1. Analyses of Abundance, Basic Models  
+# 1. Analyses of Abundance using Distance-Removal Models for Point Counts, Basic Models  
 
-## 1.1 Abundance with a Poisson Distribution  
+## 1.1. Abundance with a Poisson Distribution  
 ```{r, include=FALSE, cache=FALSE}
 knitr::read_chunk('01-analysis_basic-models-pois-ZIP.R')
 ```
 ```{r, basic Poisson, eval=FALSE}
 ```
 
-## 1.2 Abundance with a ZIP Distribution  
+## 1.2. Abundance with a ZIP Distribution  
 ```{r, include=FALSE, cache=FALSE}
 knitr::read_chunk('01-analysis_basic-models-pois-ZIP.R')
 ```
@@ -56,7 +53,7 @@ Next we calculate the prior probabilities for treatments and availability covari
 ```{r, Prior probs treat, eval=TRUE}
 ```
 
-# 2. Analyses of Abundance and Vegetation
+# 2. Abundance and Vegetation
 
 ## 2.1. Vegetation Covariates, Poisson Distribution, Global Covariates
 ```{r, include=FALSE, cache=FALSE}
@@ -86,7 +83,7 @@ knitr::read_chunk('05-analysis_vegetation-zip-GVS.R')
 ```{r, vegetation ZIP GVS, eval=FALSE}
 ```
 
-# 3. Analyses of Abundance and Forestry Treatments  
+# 3. Abundance and Forestry Treatments  
 
 ## 3.1. Forestry Treatment Covariates, Poisson Distribution, Global Covariates
 ```{r, include=FALSE, cache=FALSE}

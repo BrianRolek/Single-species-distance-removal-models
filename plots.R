@@ -10,7 +10,6 @@ ttl <- -2
 pcol="blue"
 pcol2="red"
 
-#1 BBWA
 plotfun(sp="BBWA", cov=c("scov", "sf"), spp="Bay-breasted\nWarbler", titleline=ttl, pcol=pcol, pcol2=pcol2,
         ylims=c(0,0.2), ft.size=ft.size, lnwd=lnwd, ylbs=c(0,0.1,0.2), xlbs1=c(0,0.45,0.9), xlbs2=c(0,0.5,1),
         adj.ax1=-1.5, adj.ax2=0.5, adj.ax3=1.2, adj.lab1=0.2, adj.lab3=0.2, drive=drive) 
@@ -50,7 +49,7 @@ plotfun(sp="YPWA", cov=c("ba", "md"), spp="Palm\nWarbler", titleline=ttl, pcol=p
 plotfun(sp="RBNU", cov=c("dbh","ba"), spp="Red-breasted\nNuthatch", titleline=ttl, pcol=pcol, pcol2=pcol2,
         ylims=c(0,1.5), ft.size=ft.size, lnwd=lnwd, ylbs=c(0,0.75,1.5), xlbs1=c(0,30,60), xlbs2=c(0,35,70),
         adj.ax1=-1.5, adj.ax2=0.5, adj.ax3=1.2, adj.lab1=0.2, adj.lab3=0.2, drive=drive)
-# sf^2
+
 plotfun.sf2(sp="RBNU", cov=c("sf2", NA), spp="Red-breasted\nNuthatch", titleline=ttl, pcol=pcol, pcol2=pcol2,
             ylims=c(0,0.6), ft.size=ft.size, lnwd=lnwd, ylbs=c(0,0.3,0.6), xlbs1=c(0,0.5,1), 
             adj.ax1=-1.5, adj.ax2=0.5, adj.ax3=1.2, adj.lab1=0.2, adj.lab3=0.2, drive=drive)
@@ -70,7 +69,7 @@ plotfun(sp="WIWR", cov=c("sf"), spp="Winter\nWren", titleline=ttl, pcol=pcol, pc
 plotfun(sp="WTSP", cov=c("scov","md"), spp="White-throated\nSparrow", titleline=ttl, pcol=pcol, pcol2=pcol2,
         ylims=c(0,2), ft.size=ft.size, lnwd=lnwd, ylbs=c(0,1,2), xlbs1=c(0,0.45,0.9), xlbs2=c(0,0.5,1),
         adj.ax1=-1.5, adj.ax2=0.5, adj.ax3=1.2, adj.lab1=0.2, adj.lab3=0.2, drive=drive) 
-# sf^2
+
 plotfun.sf2(sp="WTSP", cov=c("sf2", NA), spp="White-throated\nSparrow", titleline=ttl, pcol=pcol, pcol2=pcol2,
             ylims=c(0,0.8), ft.size=ft.size, lnwd=lnwd, ylbs=c(0,0.4,0.8), xlbs1=c(0,0.5,1), 
             adj.ax1=-1.5, adj.ax2=0.5, adj.ax3=1.2, adj.lab1=0.2, adj.lab3=0.2, drive=drive)
@@ -82,7 +81,6 @@ plotfun(sp="MYWA", cov=c("scov","sf"), spp="Yellow-rumped\nWarbler", titleline=t
 plotfun(sp="MYWA", cov=c("lcr"), spp="Yellow-rumped\nWarbler", titleline=ttl, pcol=pcol, pcol2=pcol2,
         ylims=c(0,1), ft.size=ft.size, lnwd=lnwd, ylbs=c(0,0.5,1.0), xlbs1=c(0,0.5,1),
         adj.ax1=-1.5, adj.ax2=0.5, adj.ax3=1.2, adj.lab1=0.2, adj.lab3=0.2, drive=drive)
-
 
 plot(NA, new=T)
 legend(0, 1.0, legend=c("Upper x-axis", "Lower x-axis"), 
@@ -131,12 +129,6 @@ for (s in 1:length(sp)){
   for (i in 1:ylen){
     lines( cdat.temp[i,c(4,5)], c(s+ycoord[i],s+ycoord[i]),
            lwd=2, col=cols[covnum[i]])
-    # arrows( x0=cdat.temp[i,3], x1=cdat.temp[i,5],
-    #         y0=s+ycoord[i], y1=s+ycoord[i], 
-    #        lwd=2, col=cols[covnum[i]], angle=90, length=0.05)
-    # arrows( x0=cdat.temp[i,3], x1=cdat.temp[i,4],
-    #         y0=s+ycoord[i], y1=s+ycoord[i], 
-    #         lwd=2, col=cols[covnum[i]], angle=90, length=0.05)
   }
 }
 plot.new()
@@ -147,12 +139,6 @@ legend("left",
        lty=c(rep(NA, 8), 1), lwd=2,
        y.intersp=2, x.intersp=0.5)
 dev.off()
-
-##############
-# Plot treatments
-##############
-load("E:\\chapter2\\outputs\\treat_GVS\\HETH.RData")
-out$sims.list$w
 
 #################
 # Plot YSH
