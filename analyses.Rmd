@@ -1,12 +1,12 @@
 ---
-title: "Appendix S2"
+title: "Hierarchical distance removal abundance models"
 knit: (function(input_file, encoding) {
   out_dir <- 'docs';
   rmarkdown::render(input_file,
  encoding=encoding,
  output_file=file.path(dirname(input_file), out_dir, 'index.html'))})
 author: "Brian W. Rolek"
-date: "May 1, 2021"
+date: "Oct. 8, 2021"
 output:
   html_document:
     df_print: paged
@@ -21,9 +21,9 @@ output:
 }
 </style>
 
-Supplemental materials for:
+Unofficial supplemental materials for replicating analyses within:
 B. W. Rolek, D. J. Harrison, D. W. Linden,  C. S. Loftin, 
-P. B. Wood. 2021. Abundances of breeding conifer-associated birds in managed and regenerating forested stands. Ecological Applications. 
+P. B. Wood. 2021. Habitat associations of breeding conifer-associated birds in managed and regenerating forested stands. Forest Ecology and Management 
 
 This RMarkdown document provides R and JAGS code for analyses of abundance in response to vegetation, forestry treatments, and years-since-harvest.  
 
@@ -112,3 +112,4 @@ knitr::read_chunk('05-analysis_treatment-zip-GVS.R')
 ```
 ```{r, treatment ZIP GVS, eval=FALSE}
 ```
+

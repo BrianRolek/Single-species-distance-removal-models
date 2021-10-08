@@ -1,94 +1,150 @@
 ###########################
 # each panel as a species
 source("C:\\Users\\rolek.brian\\Documents\\Projects\\CH2\\Results\\plot-functions.R")
-fname<- "C:\\Users\\rolek.brian\\Documents\\Projects\\CH2\\docs\\veg_bySpecies.pdf"
-pdf(fname, height=6, width=6) # width 36
-par (mfrow=c(5,4), mar=c(1.25, 2, 1.25, 0), oma=c(3.5,3.5,0.5,2)) # c(bottom, left, top, right)
+fname<- "C:\\Users\\rolek.brian\\Documents\\Projects\\CH2\\docs\\veg_bySpecies.tiff"
+tiff(fname, height=9, width=6.5, res=300, units="in") # width 36
+par (mfrow=c(7,4), mar=c(1.25, 2, 1.25, 0), oma=c(3.5,3.5,0.5,2)) # c(bottom, left, top, right)
 ft.size <- 1
 lnwd <- 3
 ttl <- -2
-pcol="blue"
+pcol="gray30"
 pcol2="red"
 
-plotfun(sp="BBWA", cov=c("scov", "sf"), spp="Bay-breasted\nWarbler", titleline=ttl, pcol=pcol, pcol2=pcol2,
-        ylims=c(0,0.2), ft.size=ft.size, lnwd=lnwd, ylbs=c(0,0.1,0.2), xlbs1=c(0,0.45,0.9), xlbs2=c(0,0.5,1),
+plotfun(sp="BBWA", cov=c("scov"), spp="Bay-breasted\nWarbler", titleline=ttl, pcol=pcol, 
+        ylims=c(0,0.2), ft.size=ft.size, lnwd=lnwd, ylbs=c(0,0.1,0.2), xlbs1=c(0,0.45,0.9), 
+        adj.ax1=-1.5, adj.ax2=0.5, adj.lab1=0.2, drive=drive) 
+
+plotfun(sp="BBWA", cov=c("sf"), spp="Bay-breasted\nWarbler", titleline=ttl, pcol=pcol, 
+        ylims=c(0,0.2), ft.size=ft.size, lnwd=lnwd, ylbs=c(0,0.1,0.2), xlbs1=c(0,0.5,1),
+        adj.ax1=-1.5, adj.ax2=0.5, adj.lab1=0.2, drive=drive) 
+
+plotfun(sp="BBWA", cov=c("lcr"), spp="Bay-breasted\nWarbler", titleline=ttl, pcol=pcol, 
+        ylims=c(0,0.2), ft.size=ft.size, lnwd=lnwd, ylbs=c(0,0.1,0.2), xlbs1=c(0,0.5,1), 
+        adj.ax1=-1.5, adj.ax2=0.5,  adj.lab1=0.2, drive=drive)
+
+plotfun(sp="BBWA", cov=c("md"), spp="Bay-breasted\nWarbler", titleline=ttl, pcol=pcol, 
+        ylims=c(0,0.2), ft.size=ft.size, lnwd=lnwd, ylbs=c(0,0.1,0.2), xlbs1=c(0,0.5,1),
+        adj.ax1=-1.5, adj.ax2=0.5, adj.lab1=0.2, drive=drive)
+
+plotfun(sp="BLBW", cov=c("dbh"), spp="Blackburnian\nWarbler", titleline=ttl, pcol=pcol, 
+        ylims=c(0,3), ft.size=ft.size, lnwd=lnwd, ylbs=c(0,1.5,3), xlbs1=c(0,30,60), 
+        adj.ax1=-1.5, adj.ax2=0.5, adj.lab1=0.2, drive=drive)
+
+plotfun(sp="BLBW", cov=c("ba"), spp="Blackburnian\nWarbler", titleline=ttl, pcol=pcol, 
+        ylims=c(0,3), ft.size=ft.size, lnwd=lnwd, ylbs=c(0,1.5,3), xlbs1=c(0,35,70),
+        adj.ax1=-1.5, adj.ax2=0.5, adj.lab1=0.2, drive=drive)
+
+plotfun(sp="BLBW", cov=c("md"), spp="Blackburnian\nWarbler", titleline=ttl, pcol=pcol, 
+        ylims=c(0,3), ft.size=ft.size, lnwd=lnwd, ylbs=c(0,1.5,3), xlbs1=c(0,0.5,1),
+        adj.ax1=-1.5, adj.ax2=0.5, adj.lab1=0.2, drive=drive) 
+
+plotfun(sp="BLPW", cov=c("ba"), spp="Blackpoll\nWarbler", titleline=ttl, pcol=pcol, 
+        ylims=c(0,0.3), ft.size=ft.size, lnwd=lnwd, ylbs=c(0,0.15,0.3), xlbs1=c(0,35,70),
         adj.ax1=-1.5, adj.ax2=0.5, adj.ax3=1.2, adj.lab1=0.2, adj.lab3=0.2, drive=drive) 
 
-plotfun(sp="BBWA", cov=c("lcr", "md"), spp="Bay-breasted\nWarbler", titleline=ttl, pcol=pcol, pcol2=pcol2,
-        ylims=c(0,0.2), ft.size=ft.size, lnwd=lnwd, ylbs=c(0,0.1,0.2), xlbs1=c(0,0.5,1), xlbs2=c(0,0.5,1),
-        adj.ax1=-1.5, adj.ax2=0.5, adj.ax3=1.2, adj.lab1=0.2, adj.lab3=0.2, drive=drive)
+plotfun(sp="BLPW", cov=c("lcr"), spp="Blackpoll\nWarbler", titleline=ttl, pcol=pcol, 
+        ylims=c(0,0.3), ft.size=ft.size, lnwd=lnwd, ylbs=c(0,0.15,0.3),  xlbs1=c(0,0.5,1),
+        adj.ax1=-1.5, adj.ax2=0.5, adj.lab1=0.2, drive=drive) 
 
-plotfun(sp="BLBW", cov=c("dbh", "ba"), spp="Blackburnian\nWarbler", titleline=ttl, pcol=pcol, pcol2=pcol2,
-        ylims=c(0,3), ft.size=ft.size, lnwd=lnwd, ylbs=c(0,1.5,3), xlbs1=c(0,30,60), xlbs2=c(0,35,70),
-        adj.ax1=-1.5, adj.ax2=0.5, adj.ax3=1.2, adj.lab1=0.2, adj.lab3=0.2, drive=drive)
+plotfun(sp="CAWA", cov=c("scomp"), spp="Canada\nWarbler", titleline=ttl, pcol=pcol, 
+        ylims=c(0,1.0), ft.size=ft.size, lnwd=lnwd, ylbs=c(0,0.5,1.0), xlbs1=c(0,0.45,0.9), 
+        adj.ax1=-1.5, adj.ax2=0.5, adj.lab1=0.2,drive=drive)  
 
-plotfun(sp="BLBW", cov=c("md"), spp="Blackburnian\nWarbler", titleline=ttl, pcol=pcol, pcol2=pcol2,
+plotfun(sp="CAWA", cov=c("ba"), spp="Canada\nWarbler", titleline=ttl, pcol=pcol, 
+        ylims=c(0,1.0), ft.size=ft.size, lnwd=lnwd, ylbs=c(0,0.5,1.0), xlbs1=c(0,35,70),
+        adj.ax1=-1.5, adj.ax2=0.5, adj.lab1=0.2, drive=drive) 
+
+plotfun(sp="HETH", cov=c("sf"), spp="Hermit\nThrush", titleline=ttl, pcol=pcol,
         ylims=c(0,0.8), ft.size=ft.size, lnwd=lnwd, ylbs=c(0,0.4,0.8), xlbs1=c(0,0.5,1),
-        adj.ax1=-1.5, adj.ax2=0.5, adj.ax3=1.2, adj.lab1=0.2, adj.lab3=0.2, drive=drive) 
+        adj.ax1=-1.5, adj.ax2=0.5, adj.lab1=0.2, drive=drive) 
 
-plotfun(sp="BLPW", cov=c("ba", "lcr"), spp="Blackpoll\nWarbler", titleline=ttl, pcol=pcol, pcol2=pcol2,
-        ylims=c(0,0.3), ft.size=ft.size, lnwd=lnwd, ylbs=c(0,0.15,0.3), xlbs1=c(0,35,70), xlbs2=c(0,0.5,1),
-        adj.ax1=-1.5, adj.ax2=0.5, adj.ax3=1.2, adj.lab1=0.2, adj.lab3=0.2, drive=drive) 
-
-plotfun(sp="CAWA", cov=c("scomp","ba"), spp="Canada\nWarbler", titleline=ttl, pcol=pcol, pcol2=pcol2,
-        ylims=c(0,1.0), ft.size=ft.size, lnwd=lnwd, ylbs=c(0,0.5,1.0), xlbs1=c(0,0.45,0.9), xlbs2=c(0,35,70),
-        adj.ax1=-1.5, adj.ax2=0.5, adj.ax3=1.2, adj.lab1=0.2, adj.lab3=0.2, drive=drive)  
-
-plotfun(sp="HETH", cov=c("sf"), spp="Hermit\nThrush", titleline=ttl, pcol=pcol, pcol2=pcol2,
-        ylims=c(0,0.8), ft.size=ft.size, lnwd=lnwd, ylbs=c(0,0.4,0.8), xlbs1=c(0,0.5,1),
-        adj.ax1=-1.5, adj.ax2=0.5, adj.ax3=1.2, adj.lab1=0.2, adj.lab3=0.2, drive=drive) 
-
-plotfun(sp="OSFL", cov=c("md"), spp="Olive-sided\nFlycatcher", titleline=ttl, pcol=pcol, pcol2=pcol2,
+plotfun(sp="OSFL", cov=c("md"), spp="Olive-sided\nFlycatcher", titleline=ttl, pcol=pcol, 
         ylims=c(0,0.03), ft.size=ft.size, lnwd=lnwd, ylbs=c(0,0.01,0.02,0.03), xlbs1=c(0,0.5,1),
-        adj.ax1=-1.5, adj.ax2=0.5, adj.ax3=1.2, adj.lab1=0.2, adj.lab3=0.2, drive=drive) 
+        adj.ax1=-1.5, adj.ax2=0.5, adj.lab1=0.2, drive=drive) 
 
-plotfun(sp="YPWA", cov=c("ba", "md"), spp="Palm\nWarbler", titleline=ttl, pcol=pcol, pcol2=pcol2,
-        ylims=c(0,0.5), ft.size=ft.size, lnwd=lnwd, ylbs=c(0,0.25,0.5), xlbs1=c(0,35,70), xlbs2=c(0,0.5,1.0),
-        adj.ax1=-1.5, adj.ax2=0.5, adj.ax3=1.2, adj.lab1=0.2, adj.lab3=0.2, drive=drive)
+plotfun(sp="YPWA", cov=c("ba"), spp="Palm\nWarbler", titleline=ttl, pcol=pcol, 
+        ylims=c(0,0.5), ft.size=ft.size, lnwd=lnwd, ylbs=c(0,0.25,0.5), xlbs1=c(0,35,70), 
+        adj.ax1=-1.5, adj.ax2=0.5, adj.lab1=0.2, drive=drive)
 
-plotfun(sp="RBNU", cov=c("dbh","ba"), spp="Red-breasted\nNuthatch", titleline=ttl, pcol=pcol, pcol2=pcol2,
-        ylims=c(0,1.5), ft.size=ft.size, lnwd=lnwd, ylbs=c(0,0.75,1.5), xlbs1=c(0,30,60), xlbs2=c(0,35,70),
-        adj.ax1=-1.5, adj.ax2=0.5, adj.ax3=1.2, adj.lab1=0.2, adj.lab3=0.2, drive=drive)
+plotfun(sp="YPWA", cov=c("md"), spp="Palm\nWarbler", titleline=ttl, pcol=pcol, 
+        ylims=c(0,0.5), ft.size=ft.size, lnwd=lnwd, ylbs=c(0,0.25,0.5), xlbs1=c(0,0.5,1.0),
+        adj.ax1=-1.5, adj.ax2=0.5, adj.lab1=0.2, drive=drive)
+
+plotfun(sp="RBNU", cov=c("dbh"), spp="Red-breasted\nNuthatch", titleline=ttl, pcol=pcol,
+        ylims=c(0,1.5), ft.size=ft.size, lnwd=lnwd, ylbs=c(0,0.75,1.5), xlbs1=c(0,30,60), 
+        adj.ax1=-1.5, adj.ax2=0.5, adj.lab1=0.2, drive=drive)
+
+plotfun(sp="RBNU", cov=c("ba"), spp="Red-breasted\nNuthatch", titleline=ttl, pcol=pcol, 
+        ylims=c(0,1.5), ft.size=ft.size, lnwd=lnwd, ylbs=c(0,0.75,1.5), xlbs1=c(0,35,70),
+        adj.ax1=-1.5, adj.ax2=0.5, adj.lab1=0.2, drive=drive)
 
 plotfun.sf2(sp="RBNU", cov=c("sf2", NA), spp="Red-breasted\nNuthatch", titleline=ttl, pcol=pcol, pcol2=pcol2,
-            ylims=c(0,0.6), ft.size=ft.size, lnwd=lnwd, ylbs=c(0,0.3,0.6), xlbs1=c(0,0.5,1), 
-            adj.ax1=-1.5, adj.ax2=0.5, adj.ax3=1.2, adj.lab1=0.2, adj.lab3=0.2, drive=drive)
+            ylims=c(0,1.5), ft.size=ft.size, lnwd=lnwd, ylbs=c(0,0.75,1.5), xlbs1=c(0,0.5,1), 
+            adj.ax1=-1.5, adj.ax2=0.5, adj.lab1=0.2, drive=drive)
 
-plotfun(sp="RCKI", cov=c("sf","ba"), spp="Ruby-crowned\nKinglet", titleline=ttl, pcol=pcol, pcol2=pcol2,
-        ylims=c(0,0.5), ft.size=ft.size, lnwd=lnwd, ylbs=c(0,0.25,0.5), xlbs1=c(0,0.5,1), xlbs2=c(0,35,70),
-        adj.ax1=-1.5, adj.ax2=0.5, adj.ax3=1.2, adj.lab1=0.2, adj.lab3=0.2, drive=drive)
+plotfun(sp="RCKI", cov=c("sf"), spp="Ruby-crowned\nKinglet", titleline=ttl, pcol=pcol, 
+        ylims=c(0,0.5), ft.size=ft.size, lnwd=lnwd, ylbs=c(0,0.25,0.5), xlbs1=c(0,0.5,1), 
+        adj.ax1=-1.5, adj.ax2=0.5,  adj.lab1=0.2, drive=drive)
 
-plotfun(sp="SWTH", cov=c("sf"), spp="Swainson's\nThrush", titleline=ttl, pcol=pcol, pcol2=pcol2,
+plotfun(sp="RCKI", cov=c("ba"), spp="Ruby-crowned\nKinglet", titleline=ttl, pcol=pcol, 
+        ylims=c(0,0.5), ft.size=ft.size, lnwd=lnwd, ylbs=c(0,0.25,0.5), xlbs1=c(0,35,70),
+        adj.ax1=-1.5, adj.ax2=0.5, adj.lab1=0.2, drive=drive)
+
+plotfun(sp="SWTH", cov=c("sf"), spp="Swainson's\nThrush", titleline=ttl, pcol=pcol, 
         ylims=c(0,0.8), ft.size=ft.size, lnwd=lnwd, ylbs=c(0,0.4,0.8), xlbs1=c(0,0.5,1),
-        adj.ax1=-1.5, adj.ax2=0.5, adj.ax3=1.2, adj.lab1=0.2, adj.lab3=0.2, drive=drive) 
+        adj.ax1=-1.5, adj.ax2=0.5, adj.lab1=0.2, drive=drive) 
 
-plotfun(sp="WIWR", cov=c("sf"), spp="Winter\nWren", titleline=ttl, pcol=pcol, pcol2=pcol2,
+plotfun(sp="WIWR", cov=c("sf"), spp="Winter\nWren", titleline=ttl, pcol=pcol, 
         ylims=c(0,0.6), ft.size=ft.size, lnwd=lnwd, ylbs=c(0,0.3,0.6), xlbs1=c(0,0.5,1), 
-        adj.ax1=-1.5, adj.ax2=0.5, adj.ax3=1.2, adj.lab1=0.2, adj.lab3=0.2, drive=drive)
+        adj.ax1=-1.5, adj.ax2=0.5, adj.lab1=0.2, drive=drive)
 
-plotfun(sp="WTSP", cov=c("scov","md"), spp="White-throated\nSparrow", titleline=ttl, pcol=pcol, pcol2=pcol2,
-        ylims=c(0,2), ft.size=ft.size, lnwd=lnwd, ylbs=c(0,1,2), xlbs1=c(0,0.45,0.9), xlbs2=c(0,0.5,1),
-        adj.ax1=-1.5, adj.ax2=0.5, adj.ax3=1.2, adj.lab1=0.2, adj.lab3=0.2, drive=drive) 
+plotfun(sp="WTSP", cov=c("scov"), spp="White-throated\nSparrow", titleline=ttl, pcol=pcol, 
+        ylims=c(0,2), ft.size=ft.size, lnwd=lnwd, ylbs=c(0,1,2), xlbs1=c(0,0.45,0.9), 
+        adj.ax1=-1.5, adj.ax2=0.5, adj.lab1=0.2, drive=drive) 
+
+plotfun(sp="WTSP", cov=c("md"), spp="White-throated\nSparrow", titleline=ttl, pcol=pcol,
+        ylims=c(0,2), ft.size=ft.size, lnwd=lnwd, ylbs=c(0,1,2), xlbs1=c(0,0.5,1),
+        adj.ax1=-1.5, adj.ax2=0.5, adj.lab1=0.2, drive=drive) 
 
 plotfun.sf2(sp="WTSP", cov=c("sf2", NA), spp="White-throated\nSparrow", titleline=ttl, pcol=pcol, pcol2=pcol2,
-            ylims=c(0,0.8), ft.size=ft.size, lnwd=lnwd, ylbs=c(0,0.4,0.8), xlbs1=c(0,0.5,1), 
+            ylims=c(0,2), ft.size=ft.size, lnwd=lnwd, ylbs=c(0,1,2), xlbs1=c(0,0.5,1), 
             adj.ax1=-1.5, adj.ax2=0.5, adj.ax3=1.2, adj.lab1=0.2, adj.lab3=0.2, drive=drive)
 
-plotfun(sp="MYWA", cov=c("scov","sf"), spp="Yellow-rumped\nWarbler", titleline=ttl, pcol=pcol, pcol2=pcol2,
-        ylims=c(0,1), ft.size=ft.size, lnwd=lnwd, ylbs=c(0,0.5,1), xlbs1=c(0,0.45,0.9), xlbs2=c(0,0.5,1),
-        adj.ax1=-1.5, adj.ax2=0.5, adj.ax3=1.2, adj.lab1=0.2, adj.lab3=0.2, drive=drive)
+plotfun(sp="MYWA", cov=c("scov"), spp="Yellow-rumped\nWarbler", titleline=ttl, pcol=pcol, 
+        ylims=c(0,1), ft.size=ft.size, lnwd=lnwd, ylbs=c(0,0.5,1), xlbs1=c(0,0.45,0.9), 
+        adj.ax1=-1.5, adj.ax2=0.5, adj.lab1=0.2, drive=drive)
+
+plotfun(sp="MYWA", cov=c("sf"), spp="Yellow-rumped\nWarbler", titleline=ttl, pcol=pcol, 
+        ylims=c(0,1), ft.size=ft.size, lnwd=lnwd, ylbs=c(0,0.5,1), xlbs1=c(0,0.5,1),
+        adj.ax1=-1.5, adj.ax2=0.5, adj.lab1=0.2, drive=drive)
 
 plotfun(sp="MYWA", cov=c("lcr"), spp="Yellow-rumped\nWarbler", titleline=ttl, pcol=pcol, pcol2=pcol2,
         ylims=c(0,1), ft.size=ft.size, lnwd=lnwd, ylbs=c(0,0.5,1.0), xlbs1=c(0,0.5,1),
-        adj.ax1=-1.5, adj.ax2=0.5, adj.ax3=1.2, adj.lab1=0.2, adj.lab3=0.2, drive=drive)
+        adj.ax1=-1.5, adj.ax2=0.5, adj.lab1=0.2, drive=drive)
 
-plot(NA, new=T)
-legend(0, 1.0, legend=c("Upper x-axis", "Lower x-axis"), 
-       fill=c(pcol2, pcol), border=NA, 
-       xpd=NA, lwd=3, lty=c(2,1), 
-       cex=1.5, y.intersp=1.5, bty="n")
 mtext("Abundance", side=2, line=1, cex=1, outer=T)
 mtext("Vegetation covariates", side=1, line=1, cex=1, outer=T)
+dev.off()
+
+#####################
+# Boxplot of ysh
+#####################
+load("C:\\Dropbox\\R\\Chapter2\\Data\\DATA.RData")
+stands.c$Treatment2 <- factor(stands.c$Treatment2, levels=levels(as.factor(stands.c$Treatment2))[c(4,5,1,2,6,7,3)])
+ylabs <- c(  "Clearcut-herbicide-PCT", "Clearcut-PCT", "Clearcut-herbicide", "Clearcut-only",
+             "Shelterwood", "Selection", "Mature")
+
+fname<- paste("C:\\Users\\rolek.brian\\Documents\\Projects\\CH2\\docs\\", "ysh_boxplot.tiff", sep="")
+tiff(fname, height=3, width=6, res=300, units="in")
+par(oma=c(0,0,0,0), mar=c(4,12,1,1))
+boxplot(YrsSinceHarv~Treatment2, data=stands.c, horizontal=T, 
+        ylab="", xlab="", xaxt="n",
+        yaxt="n")
+axis(1, at=c(10,30,50,70,90, 110))
+axis(1, at=c(10,30,50,70,90,110))
+axis(2, at=1:7, labels=ylabs, las=1)
+mtext("Treatment", side=2, line=10)
+mtext("Years-since-harvest", side=1, line=2.5)
 dev.off()
 
 ##############
